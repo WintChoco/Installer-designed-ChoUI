@@ -1,7 +1,0 @@
-{
-  "name": "My Program",
-  "version": "1.0",
-  "license": "asdf\nasdf\nasdf\nasdf\n",
-  "download_from": "https://github.com/WintChoco/leaf-mirror/releases/download/launcher%2Fv1/win32.zip",
-  "download_to": "./test"
-}
