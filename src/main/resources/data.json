@@ -1,7 +1,7 @@
 {
-  "name": "My Program",
-  "version": "1.0",
-  "license": "asdf\nzxcv",
-  "download_from": "",
-  "download_to": "./myprogram"
+  "name": "PROGRAM_NAME",
+  "version": "PROGRAM_VERSION",
+  "license": "PROGRAM_LICENSE",
+  "download_from": "PROGRAM_ZIP_URL",
+  "download_to": "PROGRAM_DOWNLOAD_TO"
 }
