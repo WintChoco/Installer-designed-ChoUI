@@ -3,9 +3,10 @@ package installer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import installer.page.TitlePage;
+import me.wincho.choui.dialog.DialogButton;
 import me.wincho.choui.rendersystem.CPage;
 import me.wincho.choui.rendersystem.CWindow;
-import me.wincho.choui.widget.dialog.MessageDialog;
+import me.wincho.choui.dialog.MessageDialog;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -39,10 +40,6 @@ public class Main {
     }
 
     public static void cancel(CPage page) {
-        page.openDialog(new MessageDialog(target1 -> {
-            page.closeDialog();
-        }, "No", target1 -> {
-            System.exit(0);
-        }, "Yes"));
+        page.openDialog(new MessageDialog("Do you want to cancel the installation?", "", new DialogButton(target -> System.exit(0), "Yes"), new DialogButton(target -> page.closeDialog(), "No")));
     }
 }

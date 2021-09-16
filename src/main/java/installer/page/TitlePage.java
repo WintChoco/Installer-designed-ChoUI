@@ -8,7 +8,7 @@ import me.wincho.choui.rendersystem.shape.Rectangle;
 import me.wincho.choui.utils.FontUtils;
 import me.wincho.choui.widget.ButtonWidget;
 import me.wincho.choui.widget.LabelWidget;
-import me.wincho.choui.widget.dialog.MessageDialog;
+import me.wincho.choui.dialog.MessageDialog;
 
 import java.awt.Color;
 import java.awt.Font;

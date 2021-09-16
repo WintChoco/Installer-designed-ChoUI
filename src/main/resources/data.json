@@ -1,0 +1,7 @@
+{
+  "name": "My Program",
+  "version": "1.0",
+  "license": "asdf\nzxcv",
+  "download_from": "",
+  "download_to": "./myprogram"
+}
