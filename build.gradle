@@ -7,12 +7,11 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://friwi.me/jcef/maven' }
+    maven { url 'https://page.wincho.kro.kr/mvn-repo' }
 }
 
 dependencies {
-    implementation 'com.github.WintChoco:ChoUI:v0.5'
+    implementation 'me.wincho:ChoUI:0.6.2'
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'net.lingala.zip4j:zip4j:2.9.0'
 }

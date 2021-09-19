@@ -2,6 +2,6 @@
   "name": "PROGRAM_NAME",
   "version": "PROGRAM_VERSION",
   "license": "PROGRAM_LICENSE",
-  "download_from": "PROGRAM_ZIP_URL",
-  "download_to": "PROGRAM_DOWNLOAD_TO"
+  "download_from": "https://github.com/microsoft/vscode-python/archive/refs/tags/2021.9.1230869389.zip",
+  "download_to": "./a"
 }

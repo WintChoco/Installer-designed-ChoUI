@@ -11,9 +11,9 @@ import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.progress.ProgressMonitor;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,15 +26,15 @@ public class InstallPage extends CPage {
         super(window);
         ProgressBarWidget progressBar = new ProgressBarWidget(200, 200, 300, 20);
         addWidget(progressBar);
-        LabelWidget label = new LabelWidget(10, 150, new Font(Font.DIALOG, Font.PLAIN, 15), "");
+        LabelWidget label = new LabelWidget(200, 160);
         addWidget(label);
 
         CompletableFuture.runAsync(() -> {
             try {
                 URL url = new URL(Main.data.get("download_from").getAsString());
                 Path path = Paths.get(Main.data.get("download_to").getAsString()).toAbsolutePath();
-                label.setText("Downloading zip file from web...");
                 Files.createDirectories(path);
+                label.setText("Downloading");
                 Files.copy(url.openStream(), path.resolve(".zip"), StandardCopyOption.REPLACE_EXISTING);
 
                 ZipFile file = new ZipFile(path.resolve(".zip").toString());
@@ -47,22 +47,30 @@ public class InstallPage extends CPage {
                 progressBar.setMax(100);
                 while (progressMonitor.getState() == ProgressMonitor.State.BUSY) {
                     progressBar.setValue(progressMonitor.getPercentDone());
-                    label.setText("Unzipping " + progressMonitor.getFileName() + "...");
+                    label.setText("Unzipping (" + progressMonitor.getPercentDone() + "%)");
                 }
 
-                System.out.println("Result: " + progressMonitor.getResult());
-
-                if (progressMonitor.getResult() == ProgressMonitor.Result.ERROR) {
-                    if (progressMonitor.getException() != null) {
-                        progressMonitor.getException().printStackTrace();
-                    } else {
-                        System.err.println("An error occurred without any exception");
-                    }
+                label.setText("Creating Uninstaller - Downloading Source");
+                Files.copy(new URL("https://github.com/installer-designed-ChoUI/UnInstaller/archive/refs/heads/master.zip").openStream(), path.resolve("uninstaller.zip"), StandardCopyOption.REPLACE_EXISTING);
+                label.setText("Creating Uninstaller - Unzipping Source");
+                ZipFile uninstaller = new ZipFile(path.resolve("uninstaller.zip").toString());
+                uninstaller.extractAll(path.toString());
+                StringBuilder builder = new StringBuilder();
+                Path datajson = path.resolve("UnInstaller-master").resolve("src").resolve("main").resolve("resources").resolve("data.json");
+                for (String s : Files.readAllLines(datajson)) {
+                    builder.append(s).append("\n");
                 }
+                Files.write(datajson, builder.toString().replace("TARGET_DIRECTORY", path.toAbsolutePath().toString()).getBytes(StandardCharsets.UTF_8));
+
+                label.setText("Creating Uninstaller - Building");
+                Runtime.getRuntime().exec("cmd /c cd " + path.resolve("UnInstaller-master") + " && gradlew shadowJar").waitFor();
+
+                label.setText("Creating Uninstaller - Moving");
+                Files.copy(path.resolve("UnInstaller-master").resolve("build").resolve("libs").resolve("UnInstaller-1.0-SNAPSHOT-all.jar"), path.resolve("uninstaller.jar"), StandardCopyOption.REPLACE_EXISTING);
 
                 Files.delete(path.resolve(".zip"));
                 window.setPage(new CompletePage(window));
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
